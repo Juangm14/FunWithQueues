@@ -4,6 +4,7 @@ const path = require('path');
 const bcrypt = require('bcrypt')
 const mongoose = require('mongoose');
 const User = require('./public/user');
+const router = require('express').Router();
 
 const app = express();
 const port = process.env.port || process.argv[2]
@@ -35,6 +36,33 @@ app.post('/registro', (req, res) =>{
         }
     })
 });
+
+
+app.get('/modificarPerfil', (req, res) =>{
+    res.sendFile(path.join(__dirname, './public/modificar.html'));
+})
+
+app.post('/modificar', (req,res) =>{
+    const {username, nombre, password} = req.body;
+    const user = new User({username, nombre, password})
+
+    User.findOneAndUpdate({username: username}, {$set: req.body}, function(err, info){
+
+        if(err){
+            res.json({
+                resultado: false,
+                msg: "No se pudo modificar el cliente",
+                err
+            })
+        }else{
+            res.json({
+                resultado: true,
+                info: info
+            })
+        }
+    });
+})
+
 
 app.listen(port, () =>{
     console.log('Escuchando en el puerto', port);

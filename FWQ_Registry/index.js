@@ -37,7 +37,6 @@ app.post('/registro', (req, res) =>{
     })
 });
 
-
 app.get('/modificarPerfil', (req, res) =>{
     res.sendFile(path.join(__dirname, './public/modificar.html'));
 })
@@ -62,7 +61,6 @@ app.post('/modificar', (req,res) =>{
         }
     });
 })
-
 
 app.listen(port, () =>{
     console.log('Escuchando en el puerto', port);

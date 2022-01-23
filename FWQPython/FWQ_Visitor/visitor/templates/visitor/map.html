@@ -1,0 +1,105 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'visitor/css/mapa.css' %}" rel="stylesheet">
+    <title>Mapa</title>
+</head>
+<body style="background-color: #222;">
+{% if 'correctamente' in mensaje %}
+    <div class="izquierda">
+        <h1>Fun With Queues Resort Activity Map</h1>
+        <div class="tablaPosiciones" id="tablaPosiciones">
+            <div class="posicion active">
+                <div class="avatar" style="margin-top: 0; height: 19px">Avatar</div>
+                <div class="id" style="margin-top: 0">ID</div>
+                <div class="nombre" style="margin-top: 0">Nombre</div>
+                <div class="posicionUser" style="margin-top: 0">Posición</div>
+                <div class="destino" style="margin-top: 0">Ciudad</div>
+                <div class="destino" style="margin-top: 0">Destino</div>
+            </div>
+
+            {% for posicion in posiciones %}
+
+                <div class="posicion">
+                    <div class="avatar">
+                        <img src="static/visitor/img/{{posicion.avatar}}.png" alt="usuario">
+                    </div>
+                    <div class="id">{{posicion.alias}}</div>
+                    <div class="nombre">{{posicion.nombre}}</div>
+                    <div class="posicionUser">{{posicion.posicion}}</div>
+                    <div class="destino"> {{posicion.ciudad}}</div>
+                    <div class="destino"> {{posicion.destino}}</div>
+                </div>
+
+            {% endfor %}
+            
+        </div>
+    </div>
+
+    <div class="derecha">
+        <div class="padre" id="padre">
+            {% for i in rango %}
+                {% if 'NA' in i|elemento:mapa %}
+                    <div class="celda" >
+                        <div class="atraccion">
+                            <p>{{i|elemento:mapa}}</p>
+                        </div>
+                    </div>
+                {% else %}
+                    {% if i|elemento:mapa == 'b' %}
+                        <div title={{i|elemento:mapaTemp}} class="celda" style="background-color: #88b0ee !important"> </div>
+                    {% elif i|elemento:mapa == '-' %}
+                        <div title={{i|elemento:mapaTemp}} class="celda" style="background-color: #181818 !important"></div>
+                    {% elif i|elemento:mapa == 'r' %}
+                        <div title={{i|elemento:mapaTemp}} class="celda" style="background-color: #ff3814 !important"></div>
+                    {% elif i|elemento:mapa == 'n' %}
+                        <div title={{i|elemento:mapaTemp}} class="celda" style="background-color: #ff9494 !important"></div>
+                    {% elif i|elemento:mapa|isDigit %}
+                        <div class="celda">
+                            <div class="atraccion">
+                                <div></div>
+                                <p>{{i|elemento:mapa}}</p>
+                                <h6>Min Wait</h6>
+                            </div>
+                        </div> 
+                    {% else %}
+                        <div title={{i|elemento:mapaTemp}} class="celda">
+                            <div class="avatar">
+                                <img class="avatar" src="static/visitor/img/1.png" alt="usuario">
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+
+
+        </div>
+    </div>
+
+{% elif 'Engine' in mensaje %}    
+    <div style="color: #ff3814;"> 
+        <p style="margin-left: 30px;"> {{mensaje}} </p> 
+    </div>
+{% else %}
+    <div style="color: #ff3814;"> 
+        <p style="margin-left: 30px;"> {{mensaje}} </p>  
+    </div>
+{% endif %}
+
+
+<script>
+    
+    setTimeout(function(){
+    window.location.reload(1);
+    }, 3000);
+
+</script>
+
+
+
+</body>
+</html>

@@ -27,13 +27,28 @@ try:
         try:
             producer = KafkaProducer(bootstrap_servers = IP_BROKER + ':' + str(PUERTO_BROKER),
                                     value_serializer=lambda x:dumps(x).encode(FORMAT))
+            op = 0
+            while op != "1" and op != "2":
+                print("Como desea que se envien los datos?")
+                print("1. Automaticamente.")
+                print("2. Manualmente.")
+                op = input()
+            
+            if op == "1":
+                while True:
+                    numVisitantes = random.randint(0,60)
+                    data = [ID, numVisitantes]
+                    producer.send('Sensor', value=data)
+                    print(bcolors.OK + f'Se envió {data} correctamente a la dirección {IP_BROKER}:{PUERTO_BROKER}' +bcolors.RESET)
+                    sleep(3)
+            else:
+                while True:
+                    numVisitantes = input("Introduce el numero de visitantes que hay en la cola:")
+                    data = [ID, int(numVisitantes)]
+                    producer.send('Sensor', value=data)
+                    print(bcolors.OK + f'Se envió {data} correctamente a la dirección {IP_BROKER}:{PUERTO_BROKER}' +bcolors.RESET)
+                    sleep(3)
 
-            while True:
-                numVisitantes = random.randint(0,60)
-                data = [ID, numVisitantes]
-                producer.send('Sensor', value=data)
-                print(bcolors.OK + f'Se envió {data} correctamente a la dirección {IP_BROKER}:{PUERTO_BROKER}' +bcolors.RESET)
-                sleep(3)
         except kafka.errors.NoBrokersAvailable:
             print(bcolors.FAIL + f'Actualmente no hay un broker disponible en la dirección {IP_BROKER}:{PUERTO_BROKER}. Espere a que se inicie el broker si la direccion es correcta o vuelva a intentarlo con otra dirección.' + bcolors.RESET)
         sleep(30)

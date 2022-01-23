@@ -1,0 +1,4 @@
+http://api.openweathermap.org/data/2.5/weather?q=Caracas&appid=a90efddc841b5dea8780297fd5590bef
+http://api.openweathermap.org/data/2.5/weather?q=Ati&appid=a90efddc841b5dea8780297fd5590bef
+http://api.openweathermap.org/data/2.5/weather?q=dubai&appid=a90efddc841b5dea8780297fd5590bef
+http://api.openweathermap.org/data/2.5/weather?q=Benidorm&appid=a90efddc841b5dea8780297fd5590bef

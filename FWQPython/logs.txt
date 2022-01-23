@@ -1,0 +1,58 @@
+{"fecha":"2021-12-02T13:11:45.225Z","ip":"::ffff:127.0.0.1","accion":"Listar un usuario.","parametros":"jose"}
+{"fecha":"2021-12-11T17:12:57.240Z","ip":"::ffff:127.0.0.1","accion":"LISTANDO USUARIOS: Se ha listado a los usuarios correctamente.","parametros":""}
+{"fecha":"2021-12-11T17:14:10.942Z","ip":"::ffff:127.0.0.1","accion":"MOSTRANDO PARQUE: Mostrando mapa correctamente.","parametros":""}
+{"fecha":"2021-12-11T17:14:49.473Z","ip":"::ffff:127.0.0.1","accion":"LISTANDO USUARIOS: Se ha listado a los usuarios correctamente.","parametros":""}
+{"fecha":"2021-12-11T17:20:22.489Z","ip":"::ffff:127.0.0.1","accion":"LISTANDO USUARIO: Listando usuario correctamente","parametros":"admin"}
+{"fecha":"2021-12-13T15:28:55.126Z","ip":"::ffff:127.0.0.1","accion":"LISTANDO USUARIOS: Se ha listado a los usuarios correctamente.","parametros":""}
+{"fecha":"2021-12-13T15:29:38.312Z","ip":"::ffff:127.0.0.1","accion":"LISTANDO USUARIOS: Se ha listado a los usuarios correctamente.","parametros":""}
+{"fecha":"2021-12-13T15:29:53.021Z","ip":"::ffff:127.0.0.1","accion":"LISTANDO USUARIO: Listando usuario correctamente","parametros":"jose"}
+{"fecha":"2021-12-13T15:29:59.464Z","ip":"::ffff:127.0.0.1","accion":"LISTANDO USUARIO: No existe ese usuario en la base de datos.","parametros":"mapa"}
+{"fecha":"2021-12-13T15:30:05.882Z","ip":"::ffff:127.0.0.1","accion":"LISTANDO USUARIO: No existe ese usuario en la base de datos.","parametros":"map"}
+{"fecha":"2021-12-13T15:32:25.411Z","ip":"::ffff:127.0.0.1","accion":"MOSTRANDO PARQUE: Mostrando mapa correctamente.","parametros":""}
+{"fecha":"2021-12-13T15:33:07.657Z","ip":"::ffff:127.0.0.1","accion":"MOSTRANDO PARQUE: Mostrando mapa correctamente.","parametros":""}
+{"fecha":"2021-12-13T15:33:16.940Z","ip":"::ffff:127.0.0.1","accion":"MOSTRANDO PARQUE: Mostrando mapa correctamente.","parametros":""}
+{"fecha":"2021-12-15T09:10:46.185Z","ip":"::ffff:127.0.0.1","accion":"MOSTRANDO PARQUE: Mostrando mapa correctamente.","parametros":""}
+{"fecha":"2021-12-15T09:13:02.648Z","ip":"::1","accion":"MOSTRANDO PARQUE: Mostrando mapa correctamente.","parametros":""}
+{"fecha":"2021-12-15T09:13:02.652Z","ip":"::1","accion":"LISTANDO USUARIOS: Se ha listado a los usuarios correctamente.","parametros":""}
+{"fecha":"2021-12-21T09:22:45.304Z","ip":"::ffff:127.0.0.1","accion":"Listar un usuario.","parametros":"admin"}
+{"fecha":"2021-12-21T09:22:56.546Z","ip":"::ffff:127.0.0.1","accion":"Listar un usuario.","parametros":"admin"}
+{"fecha":"2021-12-21T09:35:43.687Z","ip":"::1","accion":"Error en la creacion del usuario.","parametros":"usuario2"}
+{"fecha":"2021-12-21T09:36:09.466Z","ip":"::1","accion":"Se ha registrado un nuevo usuario","parametros":"usuario3"}
+{"fecha":"2021-12-21T09:39:15.909Z","ip":"::ffff:127.0.0.1","accion":"Listar un usuario.","parametros":"usuario2"}
+{"fecha":"2021-12-21T09:48:56.867Z","ip":"::1","accion":"Usuario modificado correctamente.","parametros":"admin"}
+{"fecha":"2021-12-21T17:56:03.653Z","ip":"::ffff:192.168.56.1","accion":"No se han encontrado usuarios con ese alias.","parametros":"signup"}
+{"fecha":"2021-12-21T19:00:08.314Z","ip":"::ffff:192.168.56.1","accion":"Se ha registrado un nuevo usuario","parametros":"usuario5"}
+{"fecha":"2021-12-22T09:49:46.787Z","ip":"::ffff:192.168.56.1","accion":"Se ha registrado un nuevo usuario","parametros":"usuario6"}
+{"fecha":"2021-12-22T09:51:47.067Z","ip":"::ffff:192.168.56.1","accion":"Se ha registrado un nuevo usuario","parametros":"usuario7"}
+{"fecha":"2021-12-22T09:52:31.974Z","ip":"::ffff:192.168.56.1","accion":"Se ha registrado un nuevo usuario","parametros":"usuario8"}
+{"fecha":"2021-12-22T09:52:45.987Z","ip":"::ffff:192.168.56.1","accion":"Se ha registrado un nuevo usuario","parametros":"usuario9"}
+{"fecha":"2021-12-22T09:53:19.989Z","ip":"::ffff:192.168.56.1","accion":"Se ha registrado un nuevo usuario","parametros":"usuario10"}
+{"fecha":"2021-12-22T09:54:51.186Z","ip":"::ffff:192.168.56.1","accion":"Se ha registrado un nuevo usuario","parametros":"usuario11"}
+{"fecha":"2021-12-22T12:07:47.806Z","ip":"::ffff:192.168.56.1","accion":"Se ha registrado un nuevo usuario","parametros":"jose"}
+{"fecha":"2021-12-22T12:11:58.255Z","ip":"::ffff:192.168.56.1","accion":"Se ha registrado un nuevo usuario","parametros":"j"}
+{"fecha":"2021-12-22T12:13:30.330Z","ip":"::ffff:192.168.56.1","accion":"Se ha registrado un nuevo usuario","parametros":"h"}
+{"fecha":"2021-12-22T12:16:38.793Z","ip":"::ffff:192.168.56.1","accion":"Se ha registrado un nuevo usuario","parametros":"ad"}
+{"fecha":"2021-12-22T12:17:11.896Z","ip":"::ffff:192.168.56.1","accion":"Se ha registrado un nuevo usuario","parametros":"adi"}
+{"fecha":"2021-12-22T12:18:56.826Z","ip":"::1","accion":"Usuario modificado correctamente.","parametros":"ad"}
+{"fecha":"2021-12-22T12:20:59.089Z","ip":"::ffff:192.168.56.1","accion":"Se ha registrado un nuevo usuario","parametros":"asd"}
+{"fecha":"2021-12-22T12:24:09.600Z","ip":"::ffff:192.168.56.1","accion":"Se ha registrado un nuevo usuario","parametros":"po"}
+{"fecha":"2021-12-22T12:24:44.569Z","ip":"::ffff:192.168.56.1","accion":"Se ha registrado un nuevo usuario","parametros":"qwer"}
+{"fecha":"2021-12-22T12:25:07.356Z","ip":"::ffff:192.168.56.1","accion":"Se ha registrado un nuevo usuario","parametros":"gh"}
+{"fecha":"2021-12-22T12:25:11.436Z","ip":"::ffff:192.168.56.1","accion":"Usuario modificado correctamente.","parametros":"gh"}
+{"fecha":"2021-12-22T12:28:43.847Z","ip":"::ffff:192.168.56.1","accion":"Se ha registrado un nuevo usuario","parametros":"jose"}
+{"fecha":"2021-12-22T12:30:39.272Z","ip":"::ffff:192.168.56.1","accion":"Se ha registrado un nuevo usuario","parametros":"a"}
+{"fecha":"2021-12-22T12:31:05.848Z","ip":"::ffff:192.168.56.1","accion":"Se ha registrado un nuevo usuario","parametros":"s"}
+{"fecha":"2021-12-22T12:32:00.788Z","ip":"::ffff:192.168.56.1","accion":"Se ha registrado un nuevo usuario","parametros":"q"}
+{"fecha":"2021-12-22T12:34:11.644Z","ip":"::ffff:192.168.56.1","accion":"Se ha registrado un nuevo usuario","parametros":"w"}
+{"fecha":"2021-12-22T12:37:13.331Z","ip":"::ffff:192.168.56.1","accion":"Se ha registrado un nuevo usuario","parametros":"t"}
+{"fecha":"2021-12-22T12:39:55.987Z","ip":"::ffff:192.168.56.1","accion":"Se ha registrado un nuevo usuario","parametros":"gf"}
+{"fecha":"2021-12-22T12:41:09.212Z","ip":"::ffff:192.168.56.1","accion":"Se ha registrado un nuevo usuario","parametros":"asdf"}
+{"fecha":"2021-12-23T19:39:34.314Z","ip":"::ffff:192.168.56.1","accion":"Error en la creacion del usuario. SQLITE_CONSTRAINT: UNIQUE constraint failed: user.alias","parametros":"perico"}
+{"fecha":"2021-12-23T19:41:55.281Z","ip":"::ffff:192.168.56.1","accion":"Se ha registrado un nuevo usuario","parametros":"pablo"}
+{"fecha":"2021-12-23T19:42:24.651Z","ip":"::ffff:192.168.56.1","accion":"Error en la creacion del usuario. SQLITE_CONSTRAINT: UNIQUE constraint failed: user.alias","parametros":"perico"}
+{"fecha":"2021-12-23T19:45:06.084Z","ip":"::ffff:192.168.56.1","accion":"Error en la creacion del usuario. SQLITE_CONSTRAINT: UNIQUE constraint failed: user.alias","parametros":"admin"}
+{"fecha":"2021-12-23T19:46:04.428Z","ip":"::ffff:192.168.56.1","accion":"Error en la creacion del usuario. SQLITE_CONSTRAINT: UNIQUE constraint failed: user.alias","parametros":"admin"}
+{"fecha":"2021-12-23T19:47:00.282Z","ip":"::ffff:192.168.56.1","accion":"Error en la creacion del usuario. SQLITE_CONSTRAINT: UNIQUE constraint failed: user.alias","parametros":"admin"}
+{"fecha":"2021-12-23T19:47:38.626Z","ip":"::ffff:192.168.56.1","accion":"Error en la creacion del usuario. SQLITE_CONSTRAINT: UNIQUE constraint failed: user.alias","parametros":"admin"}
+{"fecha":"2021-12-23T19:48:04.759Z","ip":"::ffff:192.168.56.1","accion":"Error en la creacion del usuario. SQLITE_CONSTRAINT: UNIQUE constraint failed: user.alias","parametros":"admin"}
+{"fecha":"2021-12-23T19:48:27.761Z","ip":"::ffff:192.168.56.1","accion":"Error en la creacion del usuario. SQLITE_CONSTRAINT: UNIQUE constraint failed: user.alias","parametros":"admin"}

@@ -1,0 +1,58 @@
+{% extends "visitor/base.html" %}
+{% load static %}
+{% block content %}
+
+
+<div class="container mt-5">
+
+	<div class="row">
+		<div class="col-12 px-5">
+			{% if messages %}
+				{% for message in messages %}
+					<div class="alert alert-{{ message.tags }}">
+						{{ message }}
+					</div>
+				{% endfor %}
+			{% endif %}
+		</div>
+
+
+
+		<div class="col-md-6 p-5 offset-md-3">
+			
+            <form method="post" action="">{% csrf_token %}
+				<h2 class="text-white">
+					Antes de empezar, introduce los siguientes parametros
+				</h2>
+				<div class="row m-0 px-3 py-5 bg-fondo">
+					<div class="col-12">
+						<p for="firstName" class="textoFormulario">IP</p>
+						<input type="text" class="text-light formularioContacto" name="ip" id="ip"required>
+					</div>
+					<div class="col-12 mt-3">
+						<p for="firstName" class="textoFormulario">PORT</p>
+						<input type="number" class="text-light formularioContacto" name="port" id="port"required>
+					</div>
+					<div class="col-12 mt-3">
+						<p for="firstName" class="textoFormulario">IP BROKER</p>
+						<input type="text" class="text-light formularioContacto" name="ipBroker" id="ipBroker" required>
+					</div>
+					<div class="col-12 mt-3">
+						<p for="firstName" class="textoFormulario">PORT BROKER</p>
+						<input type="number" class="text-light formularioContacto" name="portBroker" id="portBroker" required>
+					</div>
+					<div class="col-12">
+						<button class="btn-secondary btn border-0 float-right rounded-0 mt-3 px-5 py-3" type="submit">ENTER</button>
+					</div>
+				</div>
+			</form>
+			
+		</div>
+
+		
+
+	</div>
+
+</div>
+
+{% endblock %}

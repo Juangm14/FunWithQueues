@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'visitor/css/mapa.css' %}" rel="stylesheet">
+    <title>Usuarios</title>
+</head>
+<body style="background-color: #222;">
+
+<div class="todo">
+    <h1>Fun With Queues Resort User</h1>
+    <div class="tablaPosiciones" id="tablaPosiciones">
+        <div class="posicion active">
+            <div class="avatar" style="margin-top: 0; height: 19px">Avatar</div>
+            <div class="id" style="margin-top: 0">ID</div>
+            <div class="nombre" style="margin-top: 0">Nombre</div>
+            <div class="nombre" style="margin-top: 0">Contraseña</div>
+            <div class="nombre" style="margin-top: 0">InPark</div>
+            <div class="posicionUser" style="margin-top: 0">Posición</div>
+            <div class="destino" style="margin-top: 0">Ciudad</div>
+            <div class="destino" style="margin-top: 0">Destino</div>
+        </div>
+
+        {% for user in allUsers %}
+
+            <div class="posicion">
+                <div class="avatar">
+                    <img class="avatar" src="../static/visitor/img/{{user.avatar}}.png" alt="usuario">
+                </div>
+                <div class="id">{{user.alias}}</div>
+                <div class="nombre">{{user.nombre}}</div>
+                <div class="nombre">{{user.password}}</div>
+                <div class="nombre">{{user.inPark}}</div>
+                <div class="posicionUser">{{user.posicion}}</div>
+                <div class="destino"> {{user.ciudad}}</div>
+                <div class="destino"> {{user.destino}}</div>
+            </div>
+
+        {% endfor %}
+        
+    </div>
+</div>
+
+</body>
+</html>

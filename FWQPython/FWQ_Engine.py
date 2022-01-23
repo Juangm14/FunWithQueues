@@ -4,6 +4,29 @@ from kafka import KafkaConsumer
 from kafka import KafkaProducer
 from json import dumps
 import random
+import requests
+from Crypto.Cipher import AES
+import hashlib
+
+
+
+def encrypt(msg):
+    print(KEY)
+    cipher = AES.new(KEY, AES.MODE_EAX)
+    nonce = cipher.nonce
+    ciphertext, tag = cipher.encrypt_and_digest(msg.encode('ascii'))
+
+    return nonce, ciphertext, tag
+
+def decrypt(nonce, ciphertext, tag):
+    cipher = AES.new(KEY, AES.MODE_EAX, nonce=nonce)
+    plaintext = cipher.decrypt(ciphertext)
+
+    try:
+        cipher.verify(tag)
+        return plaintext.decode('ascii')
+    except Exception:
+        return False
 
 #Para mostrar los errores
 class bcolors:
@@ -77,18 +100,29 @@ MAPA = ['-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-',
 
 ATRACCIONES = []
 
+def mostrarMapa(mapa):
+    n = 20
+    cont = 1
+
+    for i in mapa:
+        if cont % n == 0 and cont != 0:
+            print(i)
+            cont += 1
+        else:
+            print(i, end = " ")
+            cont += 1
+
 #Manejar visitante
-def producirKafka():
+def producirKafka(data):
     connection = sqlite3.connect('user.db')
     c = connection.cursor()
     c.execute("select * from user where inPark = 1")
-    usuariosEnMapa = c.fetchall()
+    usuariosEnMapa = c.fetchall() #MAS ADELANTE NECESITAREMOS PASARLE LOS USUARIOS TAMBIEN.
     try:
         #Creamos un productor para enviar solo un mensaje.
         producer = KafkaProducer(bootstrap_servers=IP_BROKER+':'+ str(PUERTO_BROKER),
                             value_serializer=lambda x:dumps(x).encode('utf-8'))
-
-        data = MAPA + usuariosEnMapa
+        
         producer.send('Engine', value=data)
     except kafka.errors.NoBrokersAvailable:
         print(bcolors.FAIL +'Actualmente no hay un broker disponible en la dirección ' + IP_BROKER +':'+PUERTO_BROKER + '. Espere a que se inicie el broker si la direccion es correcta o vuelva a intentarlo con otra dirección.' + bcolors.RESET)
@@ -100,6 +134,7 @@ def usuarioAlMapa(userSql):
         'contraseña': userSql[2],
         'inPark': userSql[3],
         'posicion': userSql[4],
+        'ciudad': userSql[6],
     }
 
     if user['inPark'] == 1:
@@ -109,6 +144,7 @@ def usuarioAlMapa(userSql):
  
 def gestionarEntrada(data):
     #Comprobamos que haya espacio en el parque
+    print(data)
     alias = data['session']
     global MAX_VISITANTES
     if MAX_VISITANTES > 0:
@@ -126,20 +162,23 @@ def gestionarEntrada(data):
         c.execute(f"select * from user where alias = '{alias}'")
         user = c.fetchone()
         usuarioAlMapa(user)
-        MAX_VISITANTES -= 1
+        MAX_VISITANTES = MAX_VISITANTES - 1
         print(bcolors.WARNING+"Capacidad de usuarios restante en el parque: " + str(MAX_VISITANTES) +bcolors.RESET)
     else:
         producer = KafkaProducer(bootstrap_servers=IP_BROKER+':'+ str(PUERTO_BROKER),
                             value_serializer=lambda x:dumps(x).encode('utf-8'))
 
         data = f"No se ha permitido la entrada a {alias} porque el parque esta lleno. Espere a que alguien salga del parque."
+        
+        data = encrypt(data)
+        print(data)
         sleep(3)
         producer.send('Engine', value=data)
         print(bcolors.WARNING + f"No se ha permitido la entrada a {alias} porque el parque esta lleno. Espere a que alguien salga del parque." + bcolors.RESET)
     
 def gestionarSalida(data):
     global MAX_VISITANTES
-    MAX_VISITANTES =+ 1
+    MAX_VISITANTES += 1
     connection = sqlite3.connect('user.db')
     c = connection.cursor()
     alias = data['session']
@@ -200,29 +239,58 @@ def siguienteMovimiento(user):
     alias = user['session']
     connection = sqlite3.connect('user.db')
     c = connection.cursor()
-    c.execute(f"select posicion, destino from user where alias = '{alias}'")
+    c.execute(f"select inPark, posicion from user where alias = '{alias}'")
+
     result = c.fetchone()
+    inPark = int(result[0])
+    posicion = int(result[1])
+    if inPark == 1:
+        c.execute(f"select posicion, destino from user where alias = '{alias}'")
+        result = c.fetchone()
 
-    posicion = int(result[0])
-    destino = int(result[1])
-    atraccionActiva = False
+        posicion = int(result[0])
+        destino = int(result[1])
+        atraccionActiva = False
 
-    if(destino != "-1"):
-        for atraccion in ATRACCIONES:
-            if atraccion.getPosicion() == int(destino):
-                atraccionActiva = True
-                break
-        if(atraccionActiva):
-            vecinos = getVecinos(posicion)
-            vecinoMejor = getMejor(posicion, vecinos, destino)
+        if(destino != "-1"):
+            for atraccion in ATRACCIONES:
+                if atraccion.getPosicion() == int(destino):
+                    atraccionActiva = True
+                    break
+            if(atraccionActiva):
+                vecinos = getVecinos(posicion)
+                vecinoMejor = getMejor(posicion, vecinos, destino)
 
-            if vecinoMejor != 999: 
-                c.execute(f"update user set posicion = '{vecinoMejor}' where alias = '{alias}'")
-                connection.commit()
-                connection.close()
-                
-                MAPA[posicion] = '-'
-                MAPA[vecinoMejor] = alias
+                if vecinoMejor != 999: 
+                    c.execute(f"update user set posicion = '{vecinoMejor}' where alias = '{alias}'")
+                    connection.commit()
+                    connection.close()
+                    
+                    MAPA[posicion] = '-'
+                    MAPA[vecinoMejor] = alias
+    else:
+        MAPA[posicion] == '-'
+
+def comprobarInicio(data):
+    alias = data['alias']
+    password = data['password']
+
+    try:
+        connection = sqlite3.connect('user.db')
+
+        c = connection.cursor()
+        c.execute("select * from user where alias = ? and contraseña = ?", (alias, password))
+    except Exception as e:
+        return (F"Error al iniciar sesión: {e}")
+
+    result = c.fetchall()
+    connection.commit()
+    connection.close()
+
+    if len(result) != 0:
+        return alias
+    else:
+        return "Error al iniciar sesión, introduce los datos correctamente."
 
 def handle_visitor():
     fallo = True
@@ -236,12 +304,17 @@ def handle_visitor():
                 if "entrarParque" in msg:
                     gestionarEntrada(json.loads(msg))
                     sleep(5)
-                    producirKafka()
+                    producirKafka(MAPA)
                 elif "salirParque" in msg:
                     gestionarSalida(json.loads(msg))
                 elif "mover" in msg:
                     siguienteMovimiento(json.loads(msg))
-                    producirKafka()
+                    sleep(3)
+                    producirKafka(MAPA)
+                elif "iniciarSesion" in msg:
+                    resultado = comprobarInicio(json.loads(msg))
+                    sleep(3)
+                    producirKafka(resultado)
         except kafka.errors.NoBrokersAvailable:
             print(bcolors.FAIL +'Actualmente no hay un broker disponible en la dirección ' + IP_BROKER +':'+str(PUERTO_BROKER) + '. Espere a que se inicie el broker si la direccion es correcta o vuelva a intentarlo con otra dirección.' + bcolors.RESET)
             sleep(10)
@@ -265,6 +338,15 @@ def vacio(list):
 def calcularTiempo(ciclo, capacidad, cola):
     return ciclo*(cola/capacidad)+ciclo
 
+def buenTiempo(atraccion):
+    
+    vecinos = getVecinos(atraccion.getPosicion())
+
+    for vecino in vecinos:
+        if MAPA[vecino] == 'b' or MAPA[vecino] == 'r' or MAPA[vecino] == 'n':
+            return False
+    return True
+
 def cambiarMapa(serverResponse):
     
     msg = serverResponse[1:len(serverResponse)-1]
@@ -281,15 +363,23 @@ def cambiarMapa(serverResponse):
             if not(vacio(aux)):
                 nuevaAtraccion = attraction(int(aux[0]), int(aux[1]), int(aux[2]), int(aux[3]), int(aux[4]), int(aux[5]))
                 tiempo = calcularTiempo(nuevaAtraccion.getCiclo(), nuevaAtraccion.getCapacidad(), nuevaAtraccion.getCola())
-                if nuevaAtraccion.getDisponible() == 1:
+                if nuevaAtraccion.getDisponible() == 1 and buenTiempo(nuevaAtraccion) and int(tiempo) < 60:
                     MAPA[nuevaAtraccion.getPosicion()] = int(tiempo)
-                    
                     ATRACCIONES.append(nuevaAtraccion)
                 else:
                     MAPA[nuevaAtraccion.getPosicion()] = 'NA'
             atraccionAux = ""
+    
+    conn = sqlite3.connect('parque.db')
+    c1 = conn.cursor()
 
+    sql = 'update parque set parque = ?'
+    mapa = str(MAPA)
+    
+    c1.execute(sql, (mapa,))
 
+    conn.commit()
+    conn.close()
     #ver que todas las atracciones de los usuarios en el mapa estan activas, si no es asi, cambiar el destino.
     conection = sqlite3.connect('user.db')
     c = conection.cursor()
@@ -308,12 +398,10 @@ def cambiarMapa(serverResponse):
         for atraccion in ATRACCIONES:
             if atraccion.getPosicion() == destino:
                 esta = True
-
-        print("AAAAAAAAAAAA", ATRACCIONES, "AAAAAAAAAAAAAAAAAAAAAAAA")
+                
         if not(esta) and len(ATRACCIONES) > 0:
             num = random.randint(0,len(ATRACCIONES)-1)
 
-            print("Entra al if de actualizar la base de datos.")
             c.execute(f"update user set destino = '{ATRACCIONES[num].getPosicion()}' where alias = ?", (user))
             conection.commit()
 
@@ -324,7 +412,6 @@ def cambiarMapa(serverResponse):
     
 
     conection.close()
-    #producirKafka()
 
 def start():
     while(True):
@@ -333,6 +420,191 @@ def start():
         print('Respuesta del servidor: ' + serverResponse)
         cambiarMapa(serverResponse)
         sleep(3)
+
+#Manejar tiempo actual
+def current_weather():
+    ultimoArchivo = []
+    ultimosWeathers = []
+    ultimasTemperaturas = ""
+    
+    while True:
+        weathers = []
+
+        temp = ""
+
+        file = open('cityWeather.txt', 'r')
+        archivo = file.read()
+        urls = re.split("\n", archivo)
+
+        if ultimoArchivo != archivo:
+            ultimoArchivo = archivo
+
+            for i in range (4):
+                try:
+                    response = requests.get(urls[i]).json()
+                    temperatura = response['main']['temp']
+                    temperatura = round(temperatura - 273,2)
+                    if i < 3:
+                        temp += str(temperatura)  + ':'
+                        ultimasTemperaturas += str(temperatura)  + ':'
+                    else:
+                        temp += str(temperatura)
+                        ultimasTemperaturas += str(temperatura)  + ':'
+                    weathers.append({'name': response['name'],
+                                    'temp': temperatura})
+                    ultimosWeathers.append({'name': response['name'],
+                                    'temp': temperatura})
+                    print('La temperatura en ' +  response['name'] + ' es de ', temperatura)
+                except KeyError:
+                    weathers.append({'name': 'NA',
+                                    'temp': 'NA'})
+                    ultimosWeathers.append({'name': 'NA',
+                                    'temp': 'NA'})
+                    print(bcolors.WARNING + "Código de error:", response['cod'], " Mensaje: " + response['message'], bcolors.RESET)
+            file.close()
+            contador = 0
+        else:
+            file.close()
+            contador = 0
+
+            global MAPATEMP
+
+            for weather in ultimosWeathers:
+                if weather['name'] == 'NA':
+                    if contador == 0:
+                        for i in range(10):
+                            for j in range(10):
+                                if  MAPA[20*i+j] == 'b' or MAPA[20*i+j] == 'n' or MAPA[20*i+j] == '-':
+                                    MAPA[20*i+j] = 'r'
+                            
+                    elif contador == 1:
+                        for i in range(10):
+                            for j in range(10, 20):
+                                if MAPA[20*i+j] == 'b' or MAPA[20*i+j] == 'n' or MAPA[20*i+j] == '-':
+                                    MAPA[20*i+j] = 'r'
+                    elif contador == 2:
+                        for i in range(10,20):
+                            for j in range(10):
+                                if MAPA[20*i+j] == 'b' or MAPA[20*i+j] == 'n' or MAPA[20*i+j] == '-':
+                                    MAPA[20*i+j] = 'r'
+                    elif contador == 3:
+                        for i in range(10, 20):
+                            for j in range(10, 20):
+                                if MAPA[20*i+j] == 'b' or MAPA[20*i+j] == 'n' or MAPA[20*i+j] == '-':
+                                    MAPA[20*i+j] = 'r'
+                else:
+                    mapa = str(MAPA)
+
+                    if weather['temp'] < 20:
+                        if contador == 0:
+                            for i in range(10):
+                                for j in range(10):
+                                    if MAPA[20*i+j] == 'n' or MAPA[20*i+j] == 'r' or MAPA[20*i+j] == '-':
+                                        MAPA[20*i+j] = 'b'
+                        elif contador == 1:
+                            for i in range(10):
+                                for j in range(10, 20):
+                                    if MAPA[20*i+j] == 'n' or MAPA[20*i+j] == 'r' or MAPA[20*i+j] == '-':
+                                        MAPA[20*i+j] = 'b'
+                        elif contador == 2:
+                            for i in range(10,20):
+                                for j in range(10):
+                                    if MAPA[20*i+j] == 'n' or MAPA[20*i+j] == 'r' or MAPA[20*i+j] == '-':    
+                                        MAPA[20*i+j] = 'b'
+                        elif contador == 3:
+                            for i in range(10, 20):
+                                for j in range(10, 20):
+                                    if MAPA[20*i+j] == 'n' or MAPA[20*i+j] == 'r' or MAPA[20*i+j] == '-':
+                                        MAPA[20*i+j] = 'b'
+
+                    elif weather['temp'] > 30:
+                        if contador == 0:
+                            for i in range(10):
+                                for j in range(10):
+                                    if MAPA[20*i+j] == 'b' or MAPA[20*i+j] == 'r' or MAPA[20*i+j] == '-':
+                                        MAPA[20*i+j] = 'n'
+                        elif contador == 1:
+                            for i in range(0, 10):
+                                for j in range(10, 20):
+                                    if MAPA[20*i+j] == 'b' or MAPA[20*i+j] == 'r' or MAPA[20*i+j] == '-':
+                                        MAPA[20*i+j] = 'n'
+                        elif contador == 2:
+                            for i in range(10,20):
+                                for j in range(10):
+                                    if MAPA[20*i+j] == 'b' or MAPA[20*i+j] == 'r' or MAPA[20*i+j] == '-':
+                                        MAPA[20*i+j] = 'n'
+                        elif contador == 3:
+                            for i in range(10, 20):
+                                for j in range(10, 20):
+                                    if MAPA[20*i+j] == 'b' or MAPA[20*i+j] == 'r' or MAPA[20*i+j] == '-':
+                                        MAPA[20*i+j] = 'n'
+                    else:
+                        if contador == 0:
+                            for i in range(10):
+                                for j in range(10):
+                                    if MAPA[20*i+j] == 'b' or MAPA[20*i+j] == 'r' or MAPA[20*i+j] == 'n':
+                                        MAPA[20*i+j] = '-'
+
+                        elif contador == 1:
+                            for i in range(10):
+                                for j in range(10, 20):
+                                    if MAPA[20*i+j] == 'b' or MAPA[20*i+j] == 'r' or MAPA[20*i+j] == 'n':
+                                        MAPA[20*i+j] = '-'
+
+                        elif contador == 2:
+                            for i in range(10,20):
+                                for j in range(10):
+                                    if MAPA[20*i+j] == 'b' or MAPA[20*i+j] == 'r' or MAPA[20*i+j] == 'n':
+                                        MAPA[20*i+j] = '-'
+
+                        elif contador == 3:
+                            for i in range(10, 20):
+                                for j in range(10, 20):
+                                    if MAPA[20*i+j] == 'b' or MAPA[20*i+j] == 'r' or MAPA[20*i+j] == 'n':
+                                        MAPA[20*i+j] = '-'
+
+                contador += 1
+
+        conn = sqlite3.connect('user.db')
+        c1 = conn.cursor()
+
+        sql = 'select alias, posicion from user'
+        c1.execute(sql)
+
+        for user in c1.fetchall():
+            ciudad = sacarCiudad(int(user[1]))
+            c1.execute(f"update user set ciudad = '{ultimosWeathers[ciudad]['name']}' where alias = '{user[0]}'")
+            conn.commit()
+        
+        conn.close()
+
+        connection = sqlite3.connect('parque.db')
+        c = connection.cursor()
+
+        sql = 'update parque set parque = ?'
+        mapa = str(MAPA)
+        c.execute(sql, (mapa,))
+        connection.commit()
+
+        sql = 'update mapaTemp set temperaturas = ?'
+        c.execute(sql, (ultimasTemperaturas,))
+        connection.commit()
+
+        connection.close()
+        sleep(1)
+    
+def sacarCiudad(posUser):
+
+    posUser = [posUser/20, posUser%20]
+
+    if posUser[0] <= 9 and posUser[1] <= 9:
+        return 0
+    elif posUser[0] <= 9 and posUser[1] > 9:
+        return 1
+    elif posUser[0] > 9 and posUser[1] <= 9:
+        return 2
+    elif posUser[0] > 9 and posUser[1] > 9:
+        return 3
 
 ########## MAIN ##########
 try:
@@ -344,6 +616,7 @@ try:
     fallo = True
 
     threading.Thread(target=handle_visitor).start()
+    threading.Thread(target=current_weather).start()
 
     while fallo:
         try:

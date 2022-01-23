@@ -1,0 +1,310 @@
+body{
+    margin: 0;
+    color: #000;
+}
+
+
+.botonSalir{
+    position: fixed;
+    bottom: 15px; 
+    left: 50%;
+    transform: translate(-50%);
+    z-index: 100;
+    color: #fff;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    background-color: #dc3545;
+    border: 1px solid #dc3545;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.botonSalir:hover {
+    color: #fff;
+    background-color: #bb2d3b;
+    border-color: #b02a37;
+}
+/* 
+    panel de la izquierda 
+*/
+ 
+.izquierda{
+    position: relative;
+    width: 50%;
+    float: left;
+    background-color: #f2f2f2;
+    height: 100vh;
+}
+
+
+.izquierda h1{
+    font-size: 25px;
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+}
+
+.todo {
+    background-color: #000;
+    width: auto;
+    height: 100%;
+}
+
+.todo h1{
+    font-size: 25px;
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+    background-color: #222;
+}
+
+.tablaPosiciones{
+    width: calc(100% - 60px);
+    height: calc(100% - 150px);
+    float: left;
+    padding:20px;
+    margin: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    overflow-x:scroll;
+}
+
+
+.posicion{
+    background: #f2f2f2;
+    padding: 5px;
+    width: calc(100% - 10px);
+    border-radius: 5px;
+    position: relative;
+    float: left;
+    margin-bottom: 10px;
+}
+.posicion.active{
+    background: #fff!important;
+}
+
+.avatar{
+    float: left;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+}
+
+.avatar img{
+    width: 25px;
+    height: 25px;
+    margin: 4px;
+}
+
+.id{
+    float: left;
+    width: calc(19% - 10px);
+    height: auto;
+    text-align: center;
+    margin-top: 12px;
+    font-size: 14px;
+}
+
+.destino,  .posicionUser, .nombre{
+    float: left;
+    width: calc(12.5% );
+    height: auto;
+    text-align: center;
+    margin-top: 12px;
+    font-size: 14px;
+}
+
+.nombre{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+ /* 
+    panel de la derecha 
+*/ 
+
+.derecha{
+    position: relative;
+    width: 50%;
+    float: left;
+    background-color: #e0e0e0;
+    height: 100vh;
+}
+
+.padre{ 
+    width: 50vw;
+    height: 50vw;
+    max-width: 640px;
+    max-height: 640px;
+    position: relative;
+    padding: 0;
+    margin: 20px auto;
+    border: 1px solid #eeeded!important;
+}
+
+.celda{
+    width: calc(2.5vw - 2px);
+    max-width: 30px;
+    float: left;
+    max-height: 30px;
+    height: calc(2.5vw - 2px);
+    background: #e0e0e0;
+    position: relative;
+    border: 1px solid #eeeded!important;
+}
+
+
+.usuario{
+    width: calc(100%);
+    height: calc(100%);
+}
+
+
+.atraccion{
+    width: calc(100%);
+    height: calc(100%);
+    background: #424242;
+    border-radius: 4px;
+}
+
+.atraccion div{
+    width: 0; 
+    height: 0; 
+    border-top: 7px solid #424242;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent; 
+    bottom: -7px;
+    position: absolute;
+    left: calc(50% - 5px);
+    z-index: 1;
+}
+
+.usuario img{
+    width: calc(100%);
+    height: calc(100%);
+    z-index: 2;
+}
+
+.atraccion p{
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+    font-size: 15px;
+    margin-bottom: 0;
+    text-align: center;
+    padding-top: 3px;
+}
+
+.atraccion h6{
+    font-weight: 400;
+    color: #f2f2f2;
+    font-size: 7px;
+    margin: 0;
+    text-align: center;
+}
+
+
+@media (max-width: 900px) {
+    .izquierda{
+        position: relative;
+        width: 100%;
+        float: right;
+        height: auto;
+    }
+
+
+    .derecha{
+        position: relative;
+        width: 100%;
+        float: left;
+        height: auto;
+        padding-bottom: 20px;
+    }
+
+    .padre{ 
+        width: calc(100% - 10px);
+    }
+    .posicion{
+        padding: 0 5px;
+    }
+    .celda{
+        width: calc(5% - 2px);
+        max-width: 30px;
+        float: left;
+        max-height: 30px;
+        height: calc(5vw - 2px);
+        background: #e0e0e0;
+        position: relative;
+    }
+
+    .avatar{
+        float: left;
+        width: 36px;
+        height: 36px;
+        text-align: center;
+    }
+
+    .avatar img{
+        width: 30px;
+        height: 20px;
+        margin: 4px;
+    }
+    .destino,  .posicionUser, .nombre, .id, .avatar{
+        font-size: 12px;
+    }
+    .tablaPosiciones{
+        height: calc(300px);
+    }
+}
+
+
+@media (prefers-color-scheme: dark) {
+    body{
+        color: #fff!important;
+
+    }
+    .izquierda, .posicion{
+        background-color: #222 !important;
+    }
+
+    .posicion.active{
+        background: #000!important;
+    }
+
+    .tablaPosiciones{
+        background-color: #000!important;
+    }
+
+    .celda, .derecha{
+        background-color: #181818!important;
+    }
+
+    .celda, .padre{
+        border: 1px solid #1f1f1f!important;
+    }
+
+
+    .atraccion{
+        background: #f2f2f2!important;
+    }
+
+    .atraccion div{
+        border-top: 7px solid #f2f2f2!important;;
+    }
+    
+    .atraccion p{
+        color: #000!important;;
+    }
+
+    .atraccion h6{
+        color: #424242!important;;
+    }
+}

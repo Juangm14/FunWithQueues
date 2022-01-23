@@ -14,41 +14,6 @@ class bcolors:
 
 USUARIOS = []
 
-
-def iniciarSesion(msg):
-    connection = sqlite3.connect('user.db')
-
-    c = connection.cursor()
-
-    mensaje = re.split(" ", msg)
-    cont =  0
-    
-    alias = ""
-    password = ""
-
-    for m in mensaje:
-        if cont == 1:
-            alias = m
-        elif cont == 2:
-            password = m
-        cont = cont + 1
-
-    try:
-        c.execute("select * from user where alias = ? and contraseña = ?", (alias, password))
-    except Exception as e:
-        return (F"Error al iniciar sesión: {e}")
-
-    
-    result = c.fetchall()
-    print(result)
-    connection.commit()
-    connection.close()
-
-    if len(result) != 0 :
-        return alias
-    else:
-        return "Error al iniciar sesión, introduce los datos correctamente."
-
 def crearPerfil(usuario):
     connection = sqlite3.connect('user.db')
 
@@ -73,7 +38,7 @@ def crearPerfil(usuario):
     try:
         rnd = random.randint(0,399)
         dest = -1
-        c.execute(f"insert into user values('{alias}','{nombre}','{password}', 0, '{rnd}', '{dest}')")
+        c.execute(f"insert into user values('{alias}','{nombre}','{password}', 0, '{rnd}', '{dest}', 'None')")
     except Exception as e:
         return (F"Error al introducir el usuario: {e}")
 
@@ -131,12 +96,6 @@ def handle_client(conn, addr):
                 elif "modificarPerfil" in msg:
                     result = modificarPerfil(msg)
                     conn.send(result.encode(FORMAT))
-                elif "iniciarSesion" in msg:
-                    result = iniciarSesion(msg)
-                    conn.send(result.encode(FORMAT))
-                    USUARIOS.append({'conexion': addr,
-                                    'alias': result})
-                    print(USUARIOS)
                 print(f" He recibido del cliente [{addr}] el mensaje: {msg}")
         except ConnectionResetError:
             connected = False
@@ -172,10 +131,7 @@ def start():
             conn.send("OOppsss... DEMASIADAS CONEXIONES. Tendrás que esperar a que alguien se vaya".encode(FORMAT))
             conn.close()
         
-
 ######################### MAIN ##########################
-
-
 try:
     HEADER = 64
     PORT = int(sys.argv[1])

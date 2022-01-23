@@ -1,0 +1,48 @@
+{% extends "visitor/base.html" %}
+{% load static %}
+{% block content %}
+
+
+<div class="container mt-5">
+
+	<div class="row">
+		<div class="col-12 px-5">
+			{% if messages %}
+				{% for message in messages %}
+					<div class="alert alert-{{ message.tags }}">
+						{{ message }}
+					</div>
+				{% endfor %}
+			{% endif %}
+		</div>
+
+
+
+		<div class="col-md-6 p-5 offset-md-3">
+			
+				<h2 class="text-white">{{username}}, What do you want to do?</h2>
+				<div class="row m-0 px-3 py-5 bg-fondo">
+					<div class="col-12">
+						
+						<a type="button" href="{% url 'update' %}" style="width: 100%;" class="btn-secondary btn border-0 float-right rounded-0 mt-3 px-5 py-3" type="submit">Update your profile</a>
+						
+					</div>
+					<div class="col-12">
+						<a type="button" href="{% url 'map' %}" style="width: 100%;" class="btn-primary btn border-0 float-right rounded-0 mt-3 px-5 py-3" type="submit">Enter the park</a>
+
+					</div>
+					<div class="col-12">
+						<a type="button" href="{% url 'logout' %}" style="width: 100%;" class="btn-danger btn border-0 rounded-0 mt-3 px-5 py-3" type="submit">Logout</a>
+					</div>
+
+				</div>
+			
+		</div>
+
+		
+
+	</div>
+
+</div>
+
+{% endblock %}
